@@ -65,7 +65,7 @@ public class DirectoryCopy {
                   * 3.html 태그발라내서 저장하기
                   *
                   */
-                  public static byte[] htmlParshing(String html) {
+                  public static StringBuilder htmlParshing(byte[] html) {
                     
                        StringBuilder outTxt = new StringBuilder();
                     
@@ -75,10 +75,10 @@ public class DirectoryCopy {
                     
              
                     
-                      int cnt=10000;
-                       while (cnt>=-1) {
+                      int cnt=100;
+                       while (html.length!=-1) {
                          
-                               
+                               System.out.println(html.length);
                                
                                  //스크립트
                                  if (outTxt.indexOf("<script")>-1) {
@@ -90,6 +90,12 @@ public class DirectoryCopy {
                                         System.out.println("script start value: "+outTxt.charAt(start)+outTxt.charAt(start+1)+outTxt.charAt(start+2)+outTxt.charAt(start+3)+outTxt.charAt(start+4)+outTxt.charAt(start+5)+outTxt.charAt(start+6));
                                         System.out.println("script end value: "+outTxt.charAt(end-9)+outTxt.charAt(end-8)+outTxt.charAt(end-7)+outTxt.charAt(end-6)+outTxt.charAt(end-5)+outTxt.charAt(end-4)+outTxt.charAt(end-3)+outTxt.charAt(end-2)+outTxt.charAt(end-1)+outTxt.charAt(end)+outTxt.charAt(end+1));
                                         System.out.println("endIdx: "+end+" / value: "+outTxt.charAt(end));
+                                        
+                                        if (end>-1) {
+                                            
+                                        	outTxt.delete(start, outTxt.length());
+                                        	
+                                        }
                                         
                                            if (start>=0 && end>0 ) {
                                              
@@ -105,17 +111,24 @@ public class DirectoryCopy {
                                    
                                        start=outTxt.indexOf("<style");
                                        end=outTxt.indexOf("</style>")+8;
+                                       
                                              
                                         System.out.println("startIdx: "+start+" / endIdx: "+end);
                                         System.out.println("script start value: "+outTxt.charAt(start)+outTxt.charAt(start+1)+outTxt.charAt(start+2)+outTxt.charAt(start+3)+outTxt.charAt(start+4)+outTxt.charAt(start+5)+outTxt.charAt(start+6));
                                         System.out.println("script end value: "+outTxt.charAt(end-9)+outTxt.charAt(end-8)+outTxt.charAt(end-7)+outTxt.charAt(end-6)+outTxt.charAt(end-5)+outTxt.charAt(end-4)+outTxt.charAt(end-3)+outTxt.charAt(end-2)+outTxt.charAt(end-1)+outTxt.charAt(end)+outTxt.charAt(end+1));
-                                          System.out.println("endIdx: "+end+" / value: "+outTxt.charAt(end));
+                                        System.out.println("endIdx: "+end+" / value: "+outTxt.charAt(end));
                                         
-                                           if (start>=0 && end>0 ) {
+                                        if (end>-1) {
+                                        
+                                        	outTxt.delete(start, outTxt.length());
+                                        	
+                                        }
+                                        
+                                        if (start>=0 && end>0 ) {
                                              
-                                                 outTxt.delete(start, end+1);
-                                                  
-                                           }
+                                              outTxt.delete(start, end+1);
+                                                 
+                                        }
                                         
                                   
                                  }
@@ -154,13 +167,19 @@ public class DirectoryCopy {
                                                
                                           System.out.println("startIdx: "+start+" / endIdx: "+end);
                                           System.out.println("value: "+outTxt.charAt(start)+outTxt.charAt(start+1)+outTxt.charAt(start+2)+outTxt.charAt(start+3)+outTxt.charAt(start+4)+outTxt.charAt(start+5)+outTxt.charAt(start+6));
-                                            System.out.println("endIdx: "+end+" / value: "+outTxt.charAt(end));
+                                          System.out.println("endIdx: "+end+" / value: "+outTxt.charAt(end));
+                                            
+                                          if (end>-1) {
+                                                
+                                          	outTxt.delete(start, outTxt.length());
+                                           	
+                                          }
                                           
-                                             if (start>=0 && end>0 ) {
+                                          if (start>=0 && end>0 ) {
                                                
-                                                   outTxt.delete(start, end+1);
+                                                outTxt.delete(start, end+1);
                                                     
-                                             }
+                                          }
                                           
                                     
                                  }
@@ -177,8 +196,14 @@ public class DirectoryCopy {
                                          
                                      System.out.println("startIdx: "+start+" / endIdx: "+end);
                                      //System.out.println("태그 value: "+outTxt.charAt(start)+outTxt.charAt(start+1)+outTxt.charAt(start+2)+outTxt.charAt(start+3)+outTxt.charAt(start+4)+outTxt.charAt(start+5)+outTxt.charAt(start+6));
-                                      System.out.println("endIdx: "+end+" / value: "+outTxt.charAt(end));
+                                     System.out.println("endIdx: "+end+" / value: "+outTxt.charAt(end));
                                     
+                                     if (end>-1) {
+                                         
+                                     	outTxt.delete(start, outTxt.length());
+                                     	
+                                     }
+                                     
                                        if (start>=0 && end>0 ) {
                                          
                                               outTxt.delete(start, end+1);
@@ -197,9 +222,8 @@ public class DirectoryCopy {
                      
                         //
                     
-                       byte[] bytes=new String(outTxt).getBytes();
                     
-                       return bytes;
+                       return outTxt;
                   }
                     
                     
@@ -227,7 +251,8 @@ public class DirectoryCopy {
                                      e.printStackTrace();
                               }
                              // byte[] readBytes=new byte[(int)htmlFile.length()];
-                              byte[] readBytes=new byte[1024*10];
+                              byte[] readBytes=new byte[1024];
+                              
                               int readCnt=0;
                               try {
                                      readCnt=inFile.read(readBytes);
@@ -236,10 +261,19 @@ public class DirectoryCopy {
                                       * 파일의 사이즈만큼 한번에 받아와서 저장 -> 일정 사이즈만큼 잘라서 처리하는 것과 퍼포먼스 비교 예정
                                       * 현재는 미구현 상태
                                       * */
-                                     String html=new String(readBytes,0,readBytes.length);
+                                     StringBuilder txt=null;
+                                     
+                                     int idx=-1;
+                                     while ((idx=inFile.read(readBytes)) !=-1) {
+										
+                                    	 System.out.println(readCnt);
+                                      	 txt=DirectoryCopy.htmlParshing(readBytes);
+                                         txt.append(txt);
                                   
-                                     byte[] outTxt=DirectoryCopy.htmlParshing(html);
-                                  
+                                     }
+                                     
+                                     byte[] outTxt=new String(txt).getBytes(); 
+
                                      outFile.write(outTxt);
                            
                                         
