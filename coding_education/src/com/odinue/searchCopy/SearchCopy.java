@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public class SearchCopy_Full {
+public class SearchCopy {
      
               
                  static ArrayList<File> filePath=new ArrayList<File>();
@@ -225,7 +225,7 @@ public class SearchCopy_Full {
                                       * */
                                      String html=new String(readBytes,0,readBytes.length);
                                   
-                                     byte[] outTxt=SearchCopy_Full.htmlParshing(html);
+                                     byte[] outTxt=SearchCopy.htmlParshing(html);
                                   
                                      outFile.write(outTxt);
                            
@@ -259,7 +259,7 @@ public class SearchCopy_Full {
                  public static void main(String[] args) {
                     
                        //1번
-                       ArrayList<File> filePaths= SearchCopy_Full.searchDirectory(new File(args[0]));
+                       ArrayList<File> filePaths= SearchCopy.searchDirectory(new File(args[0]));
                        //System.out.println(filePaths);
                     
                        Iterator<File> iter=filePaths.iterator();
@@ -267,7 +267,7 @@ public class SearchCopy_Full {
                        while(iter.hasNext()) {
                            
                            //2번,3번
-                           byte[] sc=SearchCopy_Full.fileEdit(iter.next());
+                           byte[] sc=SearchCopy.fileEdit(iter.next());
                           // System.out.println(new String(sc));
                            
                        }
