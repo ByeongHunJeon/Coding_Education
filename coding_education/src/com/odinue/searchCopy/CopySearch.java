@@ -70,7 +70,6 @@ public class CopySearch {
 	                       outTxt.append(html);
 	                       int start=0;
 	                       int end=0;
-	                    
 	             
 	                    
 	                       while (outTxt.indexOf("</html>")!=-1) {
@@ -256,12 +255,16 @@ public class CopySearch {
 	                       //System.out.println(filePaths);
 	                    
 	                       Iterator<File> iter=filePaths.iterator();
+	                       
+	                       int cnt=0;
 	                    
 	                       while(iter.hasNext()) {
 	                           
 	                           //2번,3번
-	                           byte[] sc=SearchCopy.fileEdit(iter.next());
+	                           byte[] sc=CopySearch.fileEdit(iter.next());
 	                          // System.out.println(new String(sc));
+	                           cnt++;
+	                           System.out.println(cnt+"개의 html파일을 처리하였습니다.");
 	                           
 	                       }
 	                    
