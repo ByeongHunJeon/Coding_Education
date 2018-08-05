@@ -23,7 +23,6 @@ public class SearchCopy {
                        String fileName="";
                        String fileExt="";
                     
-                    
                        if (childFile.exists()) {
                               File[] file=childFile.listFiles();
                            
@@ -38,8 +37,6 @@ public class SearchCopy {
                                            }else {
                                                   continue;
                                            }
-                                        
-                                        
                                      }
                                   
                                      fileName=file[i].getName();
@@ -55,8 +52,8 @@ public class SearchCopy {
                               }
                            
                        }
+                       
                        return filePath;
-                    
                  }
               
               
@@ -129,7 +126,6 @@ public class SearchCopy {
                                        end=outTxt.indexOf("-->",start)+2;
                                              
                                         System.out.println("startIdx: "+start+" / endIdx: "+end);
-                                        System.out.println("주석 value: "+outTxt.charAt(start)+outTxt.charAt(start+1)+outTxt.charAt(start+2)+outTxt.charAt(start+3)+outTxt.charAt(start+4)+outTxt.charAt(start+5)+outTxt.charAt(start+6));
                                           System.out.println("endIdx: "+end+" / value: "+outTxt.charAt(end));
                                         
                                            if (start>=0 && end>0 ) {
@@ -151,7 +147,6 @@ public class SearchCopy {
 	                                     end=outTxt.indexOf(";",start);
 	                                               
 	                                     System.out.println("startIdx: "+start+" / endIdx: "+end);
-	                                     System.out.println("value: "+outTxt.charAt(start)+outTxt.charAt(start+1)+outTxt.charAt(start+2)+outTxt.charAt(start+3)+outTxt.charAt(start+4)+outTxt.charAt(start+5)+outTxt.charAt(start+6));
 	                                     System.out.println("endIdx: "+end+" / value: "+outTxt.charAt(end));
 	                                          
 	                                     if (start>=0 && end>0 ) {
@@ -170,7 +165,6 @@ public class SearchCopy {
 	                                     end=outTxt.indexOf(">",start);
 	                                         
 	                                     System.out.println("startIdx: "+start+" / endIdx: "+end);
-	                                     System.out.println("태그 value: "+outTxt.charAt(start)+outTxt.charAt(start+1)+outTxt.charAt(start+2)+outTxt.charAt(start+3)+outTxt.charAt(start+4)+outTxt.charAt(start+5)+outTxt.charAt(start+6));
 	                                     System.out.println("endIdx: "+end+" / value: "+outTxt.charAt(end));
 	                                    
 	                                     if (start>=0 && end>0 ) {

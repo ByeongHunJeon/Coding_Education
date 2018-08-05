@@ -19,13 +19,13 @@ public class CopySearch {
 	                  * 1번.디렉토리 탐색해서 디렉토리 안에 .html파일만 뽑아내어 array배열에 저장함.
 	                  * test directory : d:/test
 	                  * */
-	                 public static ArrayList<File> searchFiles(File childFile) {
+	                 public static ArrayList<File> searchFiles(File rootFile) {
 	                    
 	                       String fileName="";
 	                       boolean isHTML=false;
 	                    
-	                       if (childFile.exists()) {
-	                              File[] file=childFile.listFiles();
+	                       if (rootFile.exists()) {
+	                              File[] file=rootFile.listFiles();
 	                           
 	                              //파일이고 .html이면 배열에 저장, 디렉토리면 하위 디렉토리 탐색
 	                              for (int i = 0; i < file.length; i++) {
@@ -70,7 +70,7 @@ public class CopySearch {
 	                       outTxt.append(html);
 	                       int start=0;
 	                       int end=0;
-	             
+	                       char[] escapeChars= {};
 	                    
 	                       while (outTxt.indexOf("</html>")!=-1) {
 	                               
@@ -146,17 +146,47 @@ public class CopySearch {
 		                                     //열고 닫는 태그에 대한 처리
 		                                     start=outTxt.indexOf("&");
 		                                     end=outTxt.indexOf(";",start);
+		                                     
+		                                     outTxt.getChars(start, end+1, escapeChars, 0);
 		                                               
 		                                     System.out.println("startIdx: "+start+" / endIdx: "+end);
 		                                     System.out.println("value: "+outTxt.charAt(start)+outTxt.charAt(start+1)+outTxt.charAt(start+2)+outTxt.charAt(start+3)+outTxt.charAt(start+4)+outTxt.charAt(start+5)+outTxt.charAt(start+6));
 		                                     System.out.println("endIdx: "+end+" / value: "+outTxt.charAt(end));
-		                                          
-		                                     if (start>=0 && end>0 ) {
-		                                               
+		                                         
+		                                     System.out.println("escapeChars : "+escapeChars.toString());
+		                                     
+		                                     if (escapeChars.toString().equals("&nbsp")) {
+	                                               
 		                                    	 outTxt.delete(start, end+1);
+		                                    	 outTxt.insert(start, " tab ");
 		                                                    
 		                                     }
-	                                          
+		                                     if (escapeChars.toString().equals("&amp")) {
+	                                               
+		                                    	 outTxt.delete(start, end+1);
+		                                    	 outTxt.insert(start, "&");
+		                                                    
+		                                     }
+		                                     if (escapeChars.toString().equals("&quot")) {
+	                                               
+		                                    	 outTxt.delete(start, end+1);
+		                                    	 outTxt.insert(start, "\"");
+		                                                    
+		                                     }
+		                                     if (escapeChars.toString().equals("&lt")) {
+	                                               
+		                                    	 outTxt.delete(start, end+1);
+		                                    	 outTxt.insert(start, "<");
+		                                                    
+		                                     }
+		                                     if (escapeChars.toString().equals("&gt")) {
+	                                               
+		                                    	 outTxt.delete(start, end+1);
+		                                    	 outTxt.insert(start, ">");
+		                                                    
+		                                     }
+
+            
 	                                   
 	                                   }
 	                               
