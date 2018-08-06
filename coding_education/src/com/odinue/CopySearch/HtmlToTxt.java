@@ -41,29 +41,24 @@ public class HtmlToTxt extends FileTraverse.FileHandler {
 				inputFile=new FileInputStream(f);
 				outFile=new FileOutputStream(new File(txtPath));
 				
-			//	Stack<Character> stack=new Stack<>();
+				Stack<Character> stack=new Stack<>();
 				StringBuilder sb=new StringBuilder();
 				
 				int isc=-1;
-				boolean flag=false;
+				boolean flag=true;
 				//<태그가 들어오면 출력 flag를 off해주고 >태그가 들어오면 출력 flag를 다시 on한다.
 				while ((isc=inputFile.read())>-1) {
 					//System.out.println((char)isc);
 					
-					sb.append((char)isc);
 					
-					//flag 상태에 따라서 출력 여부가 결정된다.
-					if (flag) {
-						outFile.write(isc);
-						
-					}
 					
 					//<style 일때 </style>이 될때까지 flag값을 어떻게 false로 만들어주는가?
-					if (sb.indexOf("<style")>-1) {
+					//이 처리를 할 경우 퍼포먼스가 현저히 줄어든다.
+/*					if (sb.indexOf("<style")>-1) {
 						
 						flag=false;
 						
-					}else if (sb.indexOf("</style>")>-1) {
+					}else if (sb.indexOf("</style")>-1) {
 						
 						flag=true;
 						
@@ -73,11 +68,13 @@ public class HtmlToTxt extends FileTraverse.FileHandler {
 						
 						flag=false;
 						
-					}else if (sb.indexOf("</script>")>-1) {
+					}else if (sb.indexOf("</script")>-1) {
 						
 						flag=true;
 						
-					}
+					}*/
+					
+					
 					
 					//<태그가 시작되면 출력 flag를 off하고 스택에 넣어서 예외처리를 하거나 <>를 삭제한다.
 					if ((char)isc=='<') {
@@ -91,8 +88,15 @@ public class HtmlToTxt extends FileTraverse.FileHandler {
 
 					}
 					
-
-
+					
+					//flag 상태에 따라서 출력 여부가 결정된다.
+					if (flag) {
+						outFile.write(isc);
+						
+					}else {
+						sb.append((char)isc);
+						
+					}
 					
 					//escape문자를 원문자로 복원해주는 처리
 
