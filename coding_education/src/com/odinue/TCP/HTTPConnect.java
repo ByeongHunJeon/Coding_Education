@@ -24,11 +24,6 @@ public class HTTPConnect {
 			
 			System.out.println(http.getHeaderFields());
 			
-			//naver.comÀÇ host¿Í port
-			Socket socket=new Socket("125.209.222.141", 80);
-			InputStream input=socket.getInputStream();
-			OutputStream output=socket.getOutputStream();
-			
 			
 
 
