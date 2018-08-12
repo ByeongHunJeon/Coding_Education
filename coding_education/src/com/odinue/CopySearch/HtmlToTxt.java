@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Stack;
 
 import com.odinue.CopySearch.FileTraverse;
 
@@ -13,18 +12,16 @@ import com.odinue.CopySearch.FileTraverse;
 public class HtmlToTxt extends FileTraverse.FileHandler {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		
 		FileTraverse ft = new FileTraverse(new HtmlToTxt() ) ;
 		int cnt=ft.t(new File(args[0]));
-		System.out.println(cnt+"°³ÀÇ ÆÄÀÏÀ» Ã³¸®ÇÏ¿´½À´Ï´Ù.");
+		System.out.println(cnt+"ê°œì˜ íŒŒì¼ì„ ì²˜ë¦¬í•˜ì˜€ìŠµë‹ˆë‹¤.");
 		
 	}
 	
 
 	@Override
 	public int handle(File f) {
-		// TODO Auto-generated method stub
 		
 		
 		if ( f.getName().toUpperCase().endsWith(".HTML")) {
@@ -41,68 +38,146 @@ public class HtmlToTxt extends FileTraverse.FileHandler {
 				inputFile=new FileInputStream(f);
 				outFile=new FileOutputStream(new File(txtPath));
 				
-				Stack<Character> stack=new Stack<>();
 				StringBuilder sb=new StringBuilder();
 				
-				int isc=-1;
-				boolean flag=true;
-				//<ÅÂ±×°¡ µé¾î¿À¸é Ãâ·Â flag¸¦ offÇØÁÖ°í >ÅÂ±×°¡ µé¾î¿À¸é Ãâ·Â flag¸¦ ´Ù½Ã onÇÑ´Ù.
-				while ((isc=inputFile.read())>-1) {
-					//System.out.println((char)isc);
+				int bytes=-1;
+				boolean flag=false;
+				
+				//<íƒœê·¸ê°€ ë“¤ì–´ì˜¤ë©´ ì¶œë ¥ flagë¥¼ offí•´ì£¼ê³  >íƒœê·¸ê°€ ë“¤ì–´ì˜¤ë©´ ì¶œë ¥ flagë¥¼ ë‹¤ì‹œ oní•œë‹¤. 
+				while ((bytes=inputFile.read())>-1) {
 					
-					
-					
-					//<style ÀÏ¶§ </style>ÀÌ µÉ¶§±îÁö flag°ªÀ» ¾î¶»°Ô false·Î ¸¸µé¾îÁÖ´Â°¡?
-					//ÀÌ Ã³¸®¸¦ ÇÒ °æ¿ì ÆÛÆ÷¸Õ½º°¡ ÇöÀúÈ÷ ÁÙ¾îµç´Ù.
-/*					if (sb.indexOf("<style")>-1) {
-						
-						flag=false;
-						
-					}else if (sb.indexOf("</style")>-1) {
-						
-						flag=true;
-						
-					}
-					
-					if (sb.indexOf("<script")>-1) {
-						
-						flag=false;
-						
-					}else if (sb.indexOf("</script")>-1) {
-						
-						flag=true;
-						
-					}*/
-					
-					
-					
-					//<ÅÂ±×°¡ ½ÃÀÛµÇ¸é Ãâ·Â flag¸¦ offÇÏ°í ½ºÅÃ¿¡ ³Ö¾î¼­ ¿¹¿ÜÃ³¸®¸¦ ÇÏ°Å³ª <>¸¦ »èÁ¦ÇÑ´Ù.
-					if ((char)isc=='<') {
+					//<íƒœê·¸ê°€ ì‹œì‘ë˜ë©´ ì¶œë ¥ flagë¥¼ offí•˜ê³  ìŠ¤íƒì— ë„£ì–´ì„œ ì˜ˆì™¸ì²˜ë¦¬ë¥¼ í•˜ê±°ë‚˜ <>ë¥¼ ì‚­ì œí•œë‹¤.
+					if ((char)bytes=='<') {
 						
 						flag=false;
 						
 					}
-					if ((char)isc=='>') {
 					
-						flag=true;
+					//escapeë¬¸ìë¥¼ ì›ë¬¸ìë¡œ ë³µì›í•´ì£¼ëŠ” ì²˜ë¦¬ ì‹œì‘ë¶€ë¶„
+					if ((char)bytes=='&') {
+						
+					//	System.out.println("escapeë¬¸ì  ì²˜ë¦¬ì‹œì‘");
+						
+						flag=false;
+						
+					}
+					
+					//escapeë¬¸ìë¥¼ ê²€ì‚¬í•´ì„œ ë³€í™˜í•´ì£¼ëŠ” ë¶„ê¸°ë¬¸
+					if (sb.indexOf("&lt")>-1) {
+						outFile.write("<".getBytes());
+						
+					}
+					
+					if (sb.indexOf("&gt")>-1) {
+						outFile.write(">".getBytes());
+						
+					}
+					if (sb.indexOf("&nbsp")>-1) {
+						outFile.write("\t".getBytes());
+						
+					}
+					if (sb.indexOf("&quot")>-1) {
+						outFile.write("\"".getBytes());
 
 					}
+					if (sb.indexOf("&amp")>-1) {
+						outFile.write("&".getBytes());
+						
+					}
+					if (sb.indexOf("&copy")>-1) {
+						outFile.write("copy".getBytes());
+						
+					}
+					if (sb.indexOf("&trade")>-1) {
+					//	outFile.write("â„¢".getBytes());
+						
+					}
 					
-					
-					//flag »óÅÂ¿¡ µû¶ó¼­ Ãâ·Â ¿©ºÎ°¡ °áÁ¤µÈ´Ù.
+					//flag ìƒíƒœì— ë”°ë¼ì„œ ì¶œë ¥ ì—¬ë¶€ê°€ ê²°ì •ëœë‹¤.
 					if (flag) {
-						outFile.write(isc);
-						
+						outFile.write(bytes);
 					}else {
-						sb.append((char)isc);
+						sb.append((char)bytes);
+					}
+					
+					
+					//scriptë‚˜ style ì•ˆì— >ê°€ í¬í•¨ë˜ì–´ ìˆìœ¼ë©´ flag ì‘ë™ : ë…¼ë¦¬ì ìœ¼ë¡œ  flagê°’ì— ëŒ€í•œ ì •ì˜ê°€ í•„ìš”
+					if ((char)bytes=='>') {
+						
+						flag=true;
+
+					}
+					
+					
+					
+					//<script ì¼ë•Œ </script>ì´ ë ë•Œê¹Œì§€ flagê°’ì„ falseë¡œ ë³€ê²½í•´ì£¼ê³  sbì— ë‹´ì•„ë‘ì—ˆë˜ê²ƒì„ ""ìœ¼ë¡œ ë³€ê²½í•´ì„œ ì´ˆê¸°í™”
+					if (sb.indexOf("<script type=\"text/javascript\">")>-1) {
+						
+						flag=false;
+						sb.replace(0, sb.length(), "");
+						
+					}else if (sb.indexOf("</script>")>-1) {
+						flag=true;
+						sb.replace(0, sb.length(), "");
+					}
+					
+					
+					//scriptíƒœê·¸ ì²˜ë¦¬ì™€ ë™ì¼í•˜ê²Œ ì²˜ë¦¬
+					if (sb.indexOf("<style type=\"text/css\">")>-1) {
+						
+						
+						flag=false;
+						sb.replace(0, sb.length(), "");
+						
+					}else if (sb.indexOf("</style>")>-1) {
+						flag=true;
+						sb.replace(0, sb.length(), "");
 						
 					}
 					
-					//escape¹®ÀÚ¸¦ ¿ø¹®ÀÚ·Î º¹¿øÇØÁÖ´Â Ã³¸®
+					
+
 
 					
-				//	System.out.println(stack.toString().replaceAll(",", ""));\
-				//	System.out.println(sb);
+					
+					//escapeë¬¸ìì²˜ë¦¬ê°€ ë‹«íˆë©´ sbë¥¼ ì´ˆê¸°í™”í•´ì£¼ê³  ì¶œë ¥ flagë¥¼ on
+					//if ((char)bytes==';') {
+					if (flag) {
+					
+						if (sb.indexOf("lt;")>-1) {
+								flag=true;
+								sb.replace(0, sb.length(), "");
+							//	System.out.println("escape ì²˜ë¦¬ ì™„ë£Œ");
+						}
+						if (sb.indexOf("gt;")>-1) {
+							flag=true;
+							sb.replace(0, sb.length(), "");
+							
+						}
+						if (sb.indexOf("nbsp;")>-1) {
+							flag=true;
+							sb.replace(0, sb.length(), "");
+						}
+						if (sb.indexOf("quot;")>-1) {
+							flag=true;
+							sb.replace(0, sb.length(), "");
+						}
+						if (sb.indexOf("amp;")>-1) {
+							flag=true;
+							sb.replace(0, sb.length(), "");
+						}
+						if (sb.indexOf("copy;")>-1) {
+							flag=true;
+							sb.replace(0, sb.length(), "");
+						}
+						if (sb.indexOf("trade;")>-1) {
+							flag=true;
+							sb.replace(0, sb.length(), "");
+						}
+						
+					}
+
+				//	System.out.println("sb ë‚´ìš©í™•ì¸:"+sb);
 						
 				}
 				

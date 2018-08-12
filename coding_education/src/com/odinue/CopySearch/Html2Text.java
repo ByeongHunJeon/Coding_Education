@@ -13,7 +13,6 @@ import com.odinue.CopySearch.FileTraverse;
 public class Html2Text extends FileTraverse.FileHandler {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		
 		FileTraverse ft = new FileTraverse(new Html2Text() ) ;
 		int cnt=ft.t(new File(args[0]));
@@ -24,7 +23,6 @@ public class Html2Text extends FileTraverse.FileHandler {
 
 	@Override
 	public int handle(File f) {
-		// TODO Auto-generated method stub
 		
 		
 		if ( f.getName().toUpperCase().endsWith(".HTML")) {
@@ -41,14 +39,13 @@ public class Html2Text extends FileTraverse.FileHandler {
 				inputFile=new FileInputStream(f);
 				outFile=new FileOutputStream(new File(txtPath));
 				
-			//	Stack<Character> stack=new Stack<>();
 				StringBuilder sb=new StringBuilder();
 				
 				int isc=-1;
 				boolean flag=false;
+				
 				//<태그가 들어오면 출력 flag를 off해주고 >태그가 들어오면 출력 flag를 다시 on한다.
 				while ((isc=inputFile.read())>-1) {
-					//System.out.println((char)isc);
 					
 					//<태그가 시작되면 출력 flag를 off하고 스택에 넣어서 예외처리를 하거나 <>를 삭제한다.
 					if ((char)isc=='<') {
@@ -56,34 +53,130 @@ public class Html2Text extends FileTraverse.FileHandler {
 						flag=false;
 						
 					}
-					if ((char)isc=='>') {
 					
-						flag=true;
-
-					}
-					
-					//<style 일때 </style>이 될때까지 flag값을 어떻게 false로 만들어주는가?
-					if (sb.indexOf("<style")>-1) {
+					//escape문자를 원문자로 복원해주는 처리 시작부분
+					if ((char)isc=='&') {
+						
+					//	System.out.println("escape문자  처리시작");
+						
+						flag=false;
 						
 					}
+					
+					//escape문자를 검사해서 변환해주는 분기문
+					if (sb.indexOf("&lt")>-1) {
+						outFile.write("<".getBytes());
+						
+					}
+					
+					if (sb.indexOf("&gt")>-1) {
+						outFile.write(">".getBytes());
+						
+					}
+					if (sb.indexOf("&nbsp")>-1) {
+						outFile.write("\t".getBytes());
+						
+					}
+					if (sb.indexOf("&quot")>-1) {
+						outFile.write("\"".getBytes());
+
+					}
+					if (sb.indexOf("&amp")>-1) {
+						outFile.write("&".getBytes());
+						
+					}
+					if (sb.indexOf("&copy")>-1) {
+						outFile.write("copy".getBytes());
+						
+					}
+					if (sb.indexOf("&trade")>-1) {
+					//	outFile.write("™".getBytes());
+						
+					}
+						
 					
 					//flag 상태에 따라서 출력 여부가 결정된다.
 					if (flag) {
 						outFile.write(isc);
-						
 					}else {
-					//	stack.add((char)isc);
 						sb.append((char)isc);
 					}
 					
-					//escape문자를 원문자로 복원해주는 처리
-					if (sb.indexOf("&gt;")>-1) {
-						outFile.write("-----------".getBytes());
+					
+					
+					if ((char)isc=='>') {
 						
+						flag=true;
+
 					}
 					
-				//	System.out.println(stack.toString().replaceAll(",", ""));\
-				//	System.out.println(sb);
+					//<script 일때 </script>이 될때까지 flag값을 false로 변경해주고 sb에 담아두었던것을 ""으로 변경해서 초기화
+					if (sb.indexOf("<script")>-1) {
+						
+						flag=false;
+						
+						sb.replace(0, sb.length(), "");
+						
+					}else if (sb.indexOf("</script>")>-1) {
+						flag=true;
+						sb.replace(0, sb.length(), "");
+					}
+					
+					//script태그 처리와 동일하게 처리
+					if (sb.indexOf("<style")>-1) {
+						
+						flag=false;
+						
+						sb.replace(0, sb.length(), "");
+						
+					}else if (sb.indexOf("</style>")>-1) {
+						flag=true;
+						sb.replace(0, sb.length(), "");
+					}
+					
+					
+
+
+					
+					
+					//escape문자처리가 닫히면 sb를 초기화해주고 출력 flag를 on
+					if ((char)isc==';') {
+						
+					
+						if (sb.indexOf("lt;")>-1) {
+								flag=true;
+								sb.replace(0, sb.length(), "");
+							//	System.out.println("escape 처리 완료");
+						}
+						if (sb.indexOf("gt;")>-1) {
+							flag=true;
+							sb.replace(0, sb.length(), "");
+							
+						}
+						if (sb.indexOf("nbsp;")>-1) {
+							flag=true;
+							sb.replace(0, sb.length(), "");
+						}
+						if (sb.indexOf("quot;")>-1) {
+							flag=true;
+							sb.replace(0, sb.length(), "");
+						}
+						if (sb.indexOf("amp;")>-1) {
+							flag=true;
+							sb.replace(0, sb.length(), "");
+						}
+						if (sb.indexOf("copy;")>-1) {
+							flag=true;
+							sb.replace(0, sb.length(), "");
+						}
+						if (sb.indexOf("trade;")>-1) {
+							flag=true;
+							sb.replace(0, sb.length(), "");
+						}
+						
+					}
+
+				//	System.out.println("sb 내용확인:"+sb);
 						
 				}
 				

@@ -140,7 +140,7 @@ public class CopySearch {
 	                               
 	                               
 	                                 //&로 시작하는 태그
-	                                  if (outTxt.indexOf("&")>-1) {
+	                             /*     if (outTxt.indexOf("&")>-1) {
 	                                      
 		                                    
 		                                     //열고 닫는 태그에 대한 처리
@@ -188,7 +188,7 @@ public class CopySearch {
 
             
 	                                   
-	                                   }
+	                                   }*/
 	                               
 	                                 //<가 첫글자로 들어간 태그들에 대한
 	                                  if (outTxt.indexOf("<")>-1) {
@@ -214,7 +214,10 @@ public class CopySearch {
 	                     
 	                     
 	                       byte[] bytes=new String(outTxt).getBytes();
+	                       
+	                       System.out.println(bytes);
 	                    
+	                       
 	                       return bytes;
 	                  }
 	                    
@@ -251,6 +254,7 @@ public class CopySearch {
 	                                     byte[] outTxt=CopySearch.htmlParsing(html);
 	                                  
 	                                     outFile.write(outTxt);
+	                                     System.out.println();
 	                           
 	                                     System.out.println(fileFull+" : 저장완료");
 	                                  

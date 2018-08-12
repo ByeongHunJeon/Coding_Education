@@ -25,7 +25,7 @@ public class TCPConnect {
 		
 		String host=url.getHost();
 		
-		System.out.println("host : "+host+" / port : "+ port);
+		//System.out.println("host : "+host+" / port : "+ port);
 		
 		
 		
@@ -38,6 +38,7 @@ public class TCPConnect {
 			OutputStream output=socket.getOutputStream();
 
 			byte[] content="<iframe id=\"da_iframe_time\" name=\"da_iframe_time\" src=\"https://nv.veta.naver.com/fxshow?su=SU10079&n…itle=\"광고\" width=\"740\" height=\"120\" marginheight=\"0\" marginwidth=\"0\" scrolling=\"no\" frameborder=\"0\">".getBytes();
+	//		byte[] content="<img src=\"https://s.pstatic.net/static/newsstand/up/2017/0424/nsd162528724.png\" height=\"24\" alt=\"전자신문\" class=\"api_logo\">".getBytes();
 			byte[] img=new byte[1024*10];
 			int bytes=0;
 			

@@ -140,7 +140,7 @@ public class CopySearch {
 	                               
 	                               
 	                                 //&로 시작하는 태그
-	                                  if (outTxt.indexOf("&")>-1) {
+	                             /*     if (outTxt.indexOf("&")>-1) {
 	                                      
 		                                    
 		                                     //열고 닫는 태그에 대한 처리
@@ -188,7 +188,7 @@ public class CopySearch {
 
             
 	                                   
-	                                   }
+	                                   }*/
 	                               
 	                                 //<가 첫글자로 들어간 태그들에 대한
 	                                  if (outTxt.indexOf("<")>-1) {
@@ -213,9 +213,11 @@ public class CopySearch {
 	                           }
 	                     
 	                     
-	                       byte[] bytes=new String(outTxt).getBytes();
+	                       byte[] outBytes=new String(outTxt).getBytes();
+	                       
+	                     //  System.out.println(outBytes);
 	                    
-	                       return bytes;
+	                       return outBytes;
 	                  }
 	                    
 	                    
@@ -223,7 +225,7 @@ public class CopySearch {
 	                        * 2.태그 삭제 및 태그안에 문자들만 뽑아내기
 	                        * html파일을 받아서 태그를 벗겨내서 파일로 반환하기
 	                        * */
-	                       public static byte[] fileEdit(File htmlFile) {
+	                       public static void fileEdit(File htmlFile) {
 	                           
 	                              String fileName = htmlFile.getName();
 	                              String filePath = htmlFile.getPath();
@@ -241,16 +243,22 @@ public class CopySearch {
 	                              } catch (FileNotFoundException e) {
 	                                     e.printStackTrace();
 	                              }
-	                              byte[] readBytes=new byte[(int)htmlFile.length()];
+
+	                              byte[] bytes=new byte[1024*10];
+	                              
+	                              int i=0;
 	                              
 	                              try {
-	                                     inFile.read(readBytes);
-	                                     String html=new String(readBytes,0,readBytes.length);
-	                                  
+	                            	  
+	                            	  while ((i=inFile.read(bytes))>-1) {
+	                            		  
 
-	                                     byte[] outTxt=CopySearch.htmlParsing(html);
+	                                     byte[] outTxt=CopySearch.htmlParsing(new String(bytes));
+	                                     System.out.println(bytes);
 	                                  
 	                                     outFile.write(outTxt);
+	                                     
+	                            	  }
 	                           
 	                                     System.out.println(fileFull+" : 저장완료");
 	                                  
@@ -274,7 +282,6 @@ public class CopySearch {
 	                                     }
 	                              }
 	                           
-	                              return readBytes;
 	                       }
 	              
 	              
@@ -291,8 +298,7 @@ public class CopySearch {
 	                       while(iter.hasNext()) {
 	                           
 	                           //2번,3번
-	                           byte[] sc=CopySearch.fileEdit(iter.next());
-	                          // System.out.println(new String(sc));
+	                           CopySearch.fileEdit(iter.next());
 	                           cnt++;
 	                           System.out.println(cnt+"개의 html파일을 처리하였습니다.");
 	                           
