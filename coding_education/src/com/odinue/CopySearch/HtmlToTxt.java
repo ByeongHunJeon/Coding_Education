@@ -101,33 +101,37 @@ public class HtmlToTxt extends FileTraverse.FileHandler {
 					}
 					
 					
-					//script나 style 안에 >가 포함되어 있으면 flag 작동 : 논리적으로  flag값에 대한 정의가 필요
-					if ((char)bytes=='>') {
-						
-						flag=true;
-
-					}
-					
 					
 					
 					//<script 일때 </script>이 될때까지 flag값을 false로 변경해주고 sb에 담아두었던것을 ""으로 변경해서 초기화
-					if (sb.indexOf("<script type=\"text/javascript\">")>-1) {
+					if (sb.indexOf("<script")>-1) {
 						
 						flag=false;
-						sb.replace(0, sb.length(), "");
+					//	sb.replace(0, sb.length(), "");
+						
+					}
+					//script안에 > 태그가 있을 경우 계속 flag를 off시켜줌
+					if (sb.indexOf("<script")>-1 && sb.indexOf(">")>-1 ) {
+						flag=false;
+						System.out.println("sc");
 						
 					}else if (sb.indexOf("</script>")>-1) {
 						flag=true;
 						sb.replace(0, sb.length(), "");
 					}
+
 					
 					
 					//script태그 처리와 동일하게 처리
-					if (sb.indexOf("<style type=\"text/css\">")>-1) {
-						
+					if (sb.indexOf("<style")>-1) {
 						
 						flag=false;
-						sb.replace(0, sb.length(), "");
+					//	sb.replace(0, sb.length(), "");
+						
+					}
+					if (sb.indexOf("<style")>-1 && sb.indexOf(">")>-1 ) {
+						flag=false;
+						System.out.println("st");
 						
 					}else if (sb.indexOf("</style>")>-1) {
 						flag=true;
@@ -136,23 +140,25 @@ public class HtmlToTxt extends FileTraverse.FileHandler {
 					}
 					
 					
+					//<script>,<style> 제외하고 >로 닫히는 태그 검사
+					if ( (!(sb.indexOf("<style")>-1) || !(sb.indexOf("<script")>-1) ) && (char)bytes=='>') {
+						
+						flag=true;
 
-
+					}
 					
 					
 					//escape문자처리가 닫히면 sb를 초기화해주고 출력 flag를 on
-					//if ((char)bytes==';') {
-					if (flag) {
+					if (!flag) {
 					
+						//escape 문자중에 아래에 해당하지 않는 문자가 들어왔을때의 처리는?
 						if (sb.indexOf("lt;")>-1) {
-								flag=true;
-								sb.replace(0, sb.length(), "");
-							//	System.out.println("escape 처리 완료");
+							flag=true;
+							sb.replace(0, sb.length(), "");
 						}
 						if (sb.indexOf("gt;")>-1) {
 							flag=true;
 							sb.replace(0, sb.length(), "");
-							
 						}
 						if (sb.indexOf("nbsp;")>-1) {
 							flag=true;
