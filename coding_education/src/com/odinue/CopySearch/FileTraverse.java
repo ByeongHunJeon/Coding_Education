@@ -3,6 +3,9 @@ package com.odinue.CopySearch;
 import java.io.File;
 
 public class FileTraverse {
+	
+	public FileTraverse() {
+	}
 
 	public  static abstract class FileHandler {
 		public abstract int handle( File f) ;

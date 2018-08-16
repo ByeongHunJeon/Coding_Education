@@ -62,6 +62,7 @@ public class HtmlToTxt extends FileTraverse.FileHandler {
 						
 					}
 					
+					
 					//escape문자를 검사해서 변환해주는 분기문
 					if (sb.indexOf("&lt")>-1) {
 						outFile.write("<".getBytes());
@@ -107,13 +108,11 @@ public class HtmlToTxt extends FileTraverse.FileHandler {
 					if (sb.indexOf("<script")>-1) {
 						
 						flag=false;
-					//	sb.replace(0, sb.length(), "");
 						
 					}
 					//script안에 > 태그가 있을 경우 계속 flag를 off시켜줌
 					if (sb.indexOf("<script")>-1 && sb.indexOf(">")>-1 ) {
 						flag=false;
-						System.out.println("sc");
 						
 					}else if (sb.indexOf("</script>")>-1) {
 						flag=true;
@@ -126,12 +125,10 @@ public class HtmlToTxt extends FileTraverse.FileHandler {
 					if (sb.indexOf("<style")>-1) {
 						
 						flag=false;
-					//	sb.replace(0, sb.length(), "");
 						
 					}
 					if (sb.indexOf("<style")>-1 && sb.indexOf(">")>-1 ) {
 						flag=false;
-						System.out.println("st");
 						
 					}else if (sb.indexOf("</style>")>-1) {
 						flag=true;
@@ -140,12 +137,27 @@ public class HtmlToTxt extends FileTraverse.FileHandler {
 					}
 					
 					
-					//<script>,<style> 제외하고 >로 닫히는 태그 검사
-					if ( (!(sb.indexOf("<style")>-1) || !(sb.indexOf("<script")>-1) ) && (char)bytes=='>') {
+					//<script>,<style>태그가 아니고, 주석에 속하지 않았을 경우  닫히는 태그( > ) 검사
+					if ( (!(sb.indexOf("<style")>-1) || !(sb.indexOf("<script")>-1) ||!(sb.indexOf("<!--")>-1) ) && (char)bytes=='>') {
 						
 						flag=true;
 
 					}
+					
+					//주석안에서 태그가 닫히는 것을 방지해서 출력을 꺼준다.
+					if ((sb.indexOf("<!--")>-1) && (char)bytes=='>') {
+
+						flag=false;
+					}
+					
+					
+					//주석으로 시작하여 -->로 닫히는 경우 출력을 해준다.
+					if (sb.indexOf("-->")>-1) {
+
+						flag=true;
+						sb.replace(0, sb.length(), "");
+					}
+					
 					
 					
 					//escape문자처리가 닫히면 sb를 초기화해주고 출력 flag를 on
