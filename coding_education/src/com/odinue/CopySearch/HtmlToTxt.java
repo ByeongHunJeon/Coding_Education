@@ -13,10 +13,17 @@ public class HtmlToTxt extends FileTraverse.FileHandler {
 
 	public static void main(String[] args) {
 		
+		long startTime, endTime;
+		
+		startTime=System.currentTimeMillis();
+		
 		FileTraverse ft = new FileTraverse(new HtmlToTxt() ) ;
 		int cnt=ft.t(new File(args[0]));
 		System.out.println(cnt+"개의 파일을 처리하였습니다.");
+
+		endTime=System.currentTimeMillis();
 		
+		System.out.println("소요시간 : "+(endTime-startTime)/1000+"초 소요");
 	}
 	
 
@@ -28,7 +35,7 @@ public class HtmlToTxt extends FileTraverse.FileHandler {
 			//System.out.println( f.getPath());
 			
 			String HtmlPath=f.getPath();
-			String txtPath=HtmlPath.substring(0, HtmlPath.lastIndexOf("."))+".txt";
+			String txtPath=HtmlPath.substring(0, HtmlPath.indexOf("."))+".txt";
 			
 			System.out.println(txtPath);
 
